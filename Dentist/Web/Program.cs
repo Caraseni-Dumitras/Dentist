@@ -8,6 +8,7 @@ builder.Configuration.AddJsonFile("AppData/appsettings.Local.json", optional: tr
 builder.Configuration.AddJsonFile("AppData/appsettings.Development.json", optional: true, reloadOnChange: true);
 
 // configure layers
+
 builder.Services.ConfigureInfrastructure(builder.Configuration);
 
 builder.Services.AddControllersWithViews();
