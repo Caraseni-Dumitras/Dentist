@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Data;
+using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ public static class Configurations
 
     private static void AddDependencies(this IServiceCollection serviceCollection)
     {
+        serviceCollection.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        
         serviceCollection.AddScoped<IUserRoleService, UserRoleService>();
     }
 }

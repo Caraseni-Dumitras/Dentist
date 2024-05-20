@@ -1,5 +1,7 @@
+using Application;
 using Infrastructure;
 using Infrastructure.Services;
+using Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Configuration.AddJsonFile("AppData/appsettings.Development.json", option
 
 // configure layers
 builder.Services.ConfigureInfrastructure(builder.Configuration);
+builder.Services.ConfigureApplication();
+builder.Services.ConfigureWeb();
 
 var app = builder.Build();
 
@@ -43,7 +47,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "areaRoute",
-    pattern: "{area:exists}/{controller=AdminBase}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=AdminHome}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

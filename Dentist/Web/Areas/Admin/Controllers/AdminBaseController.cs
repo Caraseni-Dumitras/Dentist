@@ -7,8 +7,5 @@ namespace Web.Areas.Admin.Controllers;
 [Authorize(Roles = "Admin")]
 public class AdminBaseController : Controller
 {
-    public IActionResult Index()
-    {
-        return View();
-    }
+    
 }

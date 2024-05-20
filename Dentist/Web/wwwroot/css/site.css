@@ -35,3 +35,15 @@ body {
   font-size: inherit;
   color: white;
 }
+
+.administration-area-box-buttons{
+  background-color: white;
+  border: 1px solid black;
+  padding: 20px;
+  font-size: 60px;
+  color: black;
+}
+
+.administration-area-box-buttons:hover{
+  background-color: lightblue;
+}
