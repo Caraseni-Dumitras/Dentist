@@ -1,4 +1,5 @@
 using Infrastructure;
+using Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +9,19 @@ builder.Configuration.AddJsonFile("AppData/appsettings.Local.json", optional: tr
 builder.Configuration.AddJsonFile("AppData/appsettings.Development.json", optional: true, reloadOnChange: true);
 
 // configure layers
-
 builder.Services.ConfigureInfrastructure(builder.Configuration);
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// insert client and admin roles
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userRoleService = services.GetRequiredService<IUserRoleService>();
+    await userRoleService.InsertApplicationRolesAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -32,6 +40,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

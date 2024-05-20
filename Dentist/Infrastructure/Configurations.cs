@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Data;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,15 @@ public static class Configurations
         serviceCollection.AddDatabaseDeveloperPageExceptionFilter();
 
         serviceCollection.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+        
+        serviceCollection.AddDependencies();
+        
+    }
+
+    private static void AddDependencies(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IUserRoleService, UserRoleService>();
     }
 }
