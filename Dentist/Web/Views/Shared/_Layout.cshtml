@@ -48,7 +48,9 @@
     @if (isAdmin)
     {
         <div class="administration-area">
-            Administration
+            <a asp-area="Admin" asp-controller="AdminBase" asp-action="Index">
+                <button class="administration-area-button">Administration</button>
+            </a>
         </div>
     }
 </header>

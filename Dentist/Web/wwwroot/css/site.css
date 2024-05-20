@@ -27,3 +27,11 @@ body {
   text-align: center;
   margin-bottom: 5px;
 }
+
+.administration-area-button {
+  background-color: inherit;
+  border: none;
+  padding: inherit;
+  font-size: inherit;
+  color: white;
+}

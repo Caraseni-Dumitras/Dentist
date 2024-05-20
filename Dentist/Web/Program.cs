@@ -1,5 +1,6 @@
 using Infrastructure;
 using Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,8 +10,6 @@ builder.Configuration.AddJsonFile("AppData/appsettings.Development.json", option
 
 // configure layers
 builder.Services.ConfigureInfrastructure(builder.Configuration);
-
-builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -41,6 +40,10 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areaRoute",
+    pattern: "{area:exists}/{controller=AdminBase}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
