@@ -15,5 +15,7 @@ public static class Configurations
         
         //register admin factories
         serviceCollection.AddScoped<IDoctorModelFactory, DoctorModelFactory>();
+        serviceCollection.AddScoped<IProcedureModelFactory, ProcedureModelFactory>();
+
     }
 }

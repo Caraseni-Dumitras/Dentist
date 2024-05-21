@@ -8,5 +8,6 @@ public static class Configurations
     public static void ConfigureApplication(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IDoctorService, DoctorService>();
+        serviceCollection.AddScoped<IProcedureService, ProcedureService>();
     }
 }
