@@ -9,5 +9,7 @@ public static class Configurations
     {
         serviceCollection.AddScoped<IDoctorService, DoctorService>();
         serviceCollection.AddScoped<IProcedureService, ProcedureService>();
+        
+        // serviceCollection.AddTransient<IEmailService, EmailService>();
     }
 }

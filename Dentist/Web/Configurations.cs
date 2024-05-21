@@ -9,6 +9,7 @@ public static class Configurations
     public static void ConfigureWeb(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddAutoMapper(typeof(Program));
+        serviceCollection.AddRazorPages();
         
         serviceCollection.AddControllersWithViews()
             .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidatorModel<>)));
