@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Core.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services;
 
 public class UserRoleService : IUserRoleService
 {
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public UserRoleService(
         RoleManager<IdentityRole> roleManager, 
-        UserManager<IdentityUser> userManager)
+        UserManager<ApplicationUser> userManager)
     {
         _roleManager = roleManager;
         _userManager = userManager;
@@ -17,7 +18,7 @@ public class UserRoleService : IUserRoleService
     
     public async Task InsertApplicationRolesAsync()
     {
-        string[] roleNames = ["Admin", "Doctor", "Client"];
+        string[] roleNames = ["Admin", "Client"];
 
         foreach (var roleName in roleNames)
         {

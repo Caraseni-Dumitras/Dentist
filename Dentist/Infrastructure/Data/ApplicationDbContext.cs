@@ -1,10 +1,11 @@
 ﻿using Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -13,29 +14,30 @@ public class ApplicationDbContext : IdentityDbContext
     
     public DbSet<Procedure> Procedures { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
-    public DbSet<DoctorProcedure> DoctorProcedures { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<Doctor>()
-            .HasKey(d => d.Id);
+            .HasMany(d => d.Procedures)
+            .WithMany(p => p.Doctors)
+            .UsingEntity(dp => dp.ToTable("DoctorProcedureMapping"));
 
-        modelBuilder.Entity<Procedure>()
-            .HasKey(p => p.Id);
+        modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.User)
+            .WithMany(u => u.Appointments)
+            .HasForeignKey(a => a.UserId);
+
+        modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.Procedure)
+            .WithMany(p => p.Appointments)
+            .HasForeignKey(a => a.ProcedureId);
         
-        modelBuilder.Entity<DoctorProcedure>()
-            .HasKey(dp => new { dp.DoctorId, dp.ProcedureId });
-
-        modelBuilder.Entity<DoctorProcedure>()
-            .HasOne(dp => dp.Doctor)
-            .WithMany(d => d.DoctorProcedures)
-            .HasForeignKey(dp => dp.DoctorId);
-
-        modelBuilder.Entity<DoctorProcedure>()
-            .HasOne(dp => dp.Procedure)
-            .WithMany(p => p.DoctorProcedures)
-            .HasForeignKey(dp => dp.ProcedureId);
+        modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.Doctor)
+            .WithMany(d => d.Appointments)
+            .HasForeignKey(a => a.DoctorId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Infrastructure.Data;
+﻿using Core.Entities;
+using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
@@ -17,9 +18,11 @@ public static class Configurations
         
         serviceCollection.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString));
+        
         serviceCollection.AddDatabaseDeveloperPageExceptionFilter();
 
-        serviceCollection.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        serviceCollection
+            .AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
         

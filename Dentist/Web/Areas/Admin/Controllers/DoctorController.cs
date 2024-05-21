@@ -46,7 +46,6 @@ public class DoctorController : AdminBaseController
         if (ModelState.IsValid)
         {
             var doctor = _mapper.Map<Doctor>(model);
-            doctor.NormalizedUserName = doctor.UserName.ToUpper();
 
             await _doctorService.AddAsync(doctor);
             return RedirectToAction("List");
@@ -75,7 +74,6 @@ public class DoctorController : AdminBaseController
         if (ModelState.IsValid)
         {
             var doctor = _mapper.Map<Doctor>(model);
-            doctor.NormalizedUserName = doctor.UserName.ToUpper();
 
             await _doctorService.UpdateAsync(doctor);
             return RedirectToAction("List");

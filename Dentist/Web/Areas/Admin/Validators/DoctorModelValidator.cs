@@ -7,9 +7,13 @@ public class DoctorModelValidator : BaseValidatorModel<DoctorModel>
 {
     public DoctorModelValidator()
     {
-        RuleFor(it => it.UserName)
+        RuleFor(it => it.FirtName)
             .NotEmpty()
-            .WithMessage("User Name can't be empty");
+            .WithMessage("First Name can't be empty");
+        
+        RuleFor(it => it.LastName)
+            .NotEmpty()
+            .WithMessage("Last Name can't be empty");
         
         RuleFor(it => it.Email)
             .NotEmpty()
