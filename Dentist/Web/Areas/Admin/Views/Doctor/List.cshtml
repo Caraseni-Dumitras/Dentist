@@ -23,10 +23,10 @@
         <td>@doctor.UserName</td>
         <td>@doctor.Email</td>
         <td>@doctor.PhoneNumber</td>
-        @* <td> *@
-            @* <a asp-area="Admin" asp-controller="Doctor" asp-action="Edit" asp-route-id="@doctor.Id">Edit</a> | *@
-            @* <a asp-area="Admin" asp-controller="Doctor" asp-action="Delete" asp-route-id="@doctor.Id">Delete</a> *@
-        @* </td> *@
+        <td style="width: 160px">
+            <a asp-area="Admin" asp-controller="Doctor" asp-action="Edit" asp-route-id="@doctor.Id" class="btn btn-primary">Edit</a> |
+            <a asp-area="Admin" asp-controller="Doctor" asp-action="Delete" asp-route-id="@doctor.Id" class="btn btn-danger">Delete</a>
+        </td>
     </tr>
     }
     </tbody>

@@ -7,4 +7,7 @@ public interface IDoctorService
 {
     Task<IPagedList<Doctor>> GetAllDoctors();
     Task AddAsync(Doctor doctor);
+    Task<Doctor> GetDoctorByIdAsync(int id);
+    Task UpdateAsync(Doctor doctor);
+    Task DeleteAsync(Doctor doctor);
 }

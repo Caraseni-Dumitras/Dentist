@@ -24,4 +24,19 @@ public class DoctorService : IDoctorService
     {
         await _doctorRepository.InsertAsync(doctor);
     }
+
+    public async Task<Doctor> GetDoctorByIdAsync(int id)
+    {
+        return await _doctorRepository.GetByIdAsync(id);
+    }
+
+    public async Task UpdateAsync(Doctor doctor)
+    {
+        await _doctorRepository.UpdateAsync(doctor);
+    }
+
+    public async Task DeleteAsync(Doctor doctor)
+    {
+        await _doctorRepository.DeleteAsync(doctor);
+    }
 }

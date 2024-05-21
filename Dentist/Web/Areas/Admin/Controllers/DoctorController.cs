@@ -37,7 +37,7 @@ public class DoctorController : AdminBaseController
     public async Task<IActionResult> Create()
     {
         var model = await _doctorModelFactory.PrepareDoctorModelAsync(new DoctorModel(), null);
-        return View();
+        return View(model);
     }
 
     [HttpPost]
@@ -53,5 +53,49 @@ public class DoctorController : AdminBaseController
         }
 
         return RedirectToAction("Create");
+    }
+    
+    public async Task<IActionResult> Edit(int id)
+    {
+        var doctor = await _doctorService.GetDoctorByIdAsync(id);
+
+        if (doctor is null)
+        {
+            throw new ArgumentNullException(nameof(doctor));
+        }
+        
+        var model = await _doctorModelFactory.PrepareDoctorModelAsync(new DoctorModel(), doctor);
+        
+        return View(model);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> Edit(DoctorModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var doctor = _mapper.Map<Doctor>(model);
+            doctor.NormalizedUserName = doctor.UserName.ToUpper();
+
+            await _doctorService.UpdateAsync(doctor);
+            return RedirectToAction("List");
+        }
+
+        return RedirectToAction("Edit", new{id = model.Id});
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var doctor = await _doctorService.GetDoctorByIdAsync(id);
+
+        if (doctor is null)
+        {
+            throw new ArgumentNullException(nameof(doctor));
+        }
+
+        await _doctorService.DeleteAsync(doctor);
+        
+        return RedirectToAction("List");
     }
 }
