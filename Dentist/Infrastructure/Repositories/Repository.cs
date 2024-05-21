@@ -16,7 +16,7 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         _dbSet = context.Set<T>();
     }
     
-    public async Task<IList<T>> GetAll()
+    public async Task<IList<T>> GetAllAsync()
     {
         return await _dbSet.ToListAsync();
     }
@@ -26,20 +26,20 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         return await _dbSet.FindAsync(id);
     }
 
-    public async void Insert(T entity)
+    public async Task InsertAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
-    public async void Update(T entity)
+    public async Task UpdateAsync(T entity)
     {
         _dbSet.Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
-    public async void Delete(T entity)
+    public async Task DeleteAsync(T entity)
     {
         if (_context.Entry(entity).State == EntityState.Detached)
         {

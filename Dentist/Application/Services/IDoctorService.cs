@@ -6,4 +6,5 @@ namespace Application.Services;
 public interface IDoctorService
 {
     Task<IPagedList<Doctor>> GetAllDoctors();
+    Task AddAsync(Doctor doctor);
 }
