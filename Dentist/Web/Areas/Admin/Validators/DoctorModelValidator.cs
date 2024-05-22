@@ -24,5 +24,9 @@ public class DoctorModelValidator : BaseValidatorModel<DoctorModel>
         RuleFor(it => it.PhoneNumber)
             .NotEmpty()
             .WithMessage("Phone number can't be empty");
+        
+        RuleFor(model => model.SelectedProceduresIds)
+            .Must(procedureIds => procedureIds.Count <= 3)
+            .WithMessage("A doctor cannot have more than 3 procedures.");
     }   
 }

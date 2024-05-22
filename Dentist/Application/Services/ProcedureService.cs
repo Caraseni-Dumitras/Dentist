@@ -20,6 +20,11 @@ public class ProcedureService : IProcedureService
         return await (await _procedureRepository.GetAllAsync()).ToPagedListAsync(0, int.MaxValue);
     }
 
+    public async Task<List<Procedure>> GetProceduresByIdsAsync(ICollection<int> ids)
+    {
+        return await _procedureRepository.GetByIdsAsync(ids);
+    }
+
     public async Task AddAsync(Procedure procedure)
     {
         await _procedureRepository.InsertAsync(procedure);

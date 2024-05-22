@@ -2,6 +2,7 @@
 using Core;
 using Core.Entities;
 using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
@@ -17,7 +18,7 @@ public class DoctorService : IDoctorService
 
     public async Task<IPagedList<Doctor>> GetAllDoctors()
     {
-        return await (await _doctorRepository.GetAllAsync()).ToPagedListAsync(0, int.MaxValue);
+        return await ( await _doctorRepository.GetAllAsync()).ToPagedListAsync(0, int.MaxValue);
     }
 
     public async Task AddAsync(Doctor doctor)

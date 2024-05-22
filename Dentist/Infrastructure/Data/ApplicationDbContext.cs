@@ -14,15 +14,28 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Procedure> Procedures { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<DoctorProcedure> DoctorProcedures { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Doctor>()
-            .HasMany(d => d.Procedures)
-            .WithMany(p => p.Doctors)
-            .UsingEntity(dp => dp.ToTable("DoctorProcedureMapping"));
+        modelBuilder.Entity<DoctorProcedure>()
+            .HasKey(dp => new {dp.Id, dp.DoctorId, dp.ProcedureId });
+
+        modelBuilder.Entity<DoctorProcedure>()
+            .HasOne(dp => dp.Doctor)
+            .WithMany(d => d.DoctorProcedures)
+            .HasForeignKey(dp => dp.DoctorId);
+
+        modelBuilder.Entity<DoctorProcedure>()
+            .HasOne(dp => dp.Procedure)
+            .WithMany(p => p.DoctorProcedures)
+            .HasForeignKey(dp => dp.ProcedureId);
+        
+        modelBuilder.Entity<DoctorProcedure>()
+            .Property(dp => dp.Id)
+            .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<Appointment>()
             .HasOne(a => a.User)
