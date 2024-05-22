@@ -81,8 +81,7 @@ public class ProcedureController : AdminBaseController
 
         return RedirectToAction("Edit", new{id = model.Id});
     }
-
-    [HttpPost]
+    
     public async Task<IActionResult> Delete(int id)
     {
         var procedure = await _procedureService.GetProcedureByIdAsync(id);

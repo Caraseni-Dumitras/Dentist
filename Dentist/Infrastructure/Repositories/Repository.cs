@@ -16,9 +16,18 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
         _dbSet = context.Set<T>();
     }
     
+    public IQueryable<T> Table => _context.Set<T>();
+    
     public async Task<IList<T>> GetAllAsync()
     {
         return await _dbSet.ToListAsync();
+    }
+
+    public async Task<List<T>> GetByIdsAsync(ICollection<int> ids)
+    {
+        var idsToQuery = ids.ToList();
+    
+        return await _dbSet.Where(entity => idsToQuery.Contains(entity.Id)).ToListAsync();
     }
 
     public async Task<T> GetByIdAsync(object id)
@@ -34,17 +43,12 @@ public class Repository<T> : IRepository<T> where T : BaseEntity
 
     public async Task UpdateAsync(T entity)
     {
-        _dbSet.Attach(entity);
-        _context.Entry(entity).State = EntityState.Modified;
+        _dbSet.Update(entity);
         await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(T entity)
     {
-        if (_context.Entry(entity).State == EntityState.Detached)
-        {
-            _dbSet.Attach(entity);
-        }
         _dbSet.Remove(entity);
         await _context.SaveChangesAsync();
     }

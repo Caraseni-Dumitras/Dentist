@@ -12,15 +12,18 @@ public class DoctorController : AdminBaseController
     private readonly IDoctorModelFactory _doctorModelFactory;
     private readonly IMapper _mapper;
     private readonly IDoctorService _doctorService;
+    private readonly IDoctorProcedureService _doctorProcedureService;
 
     public DoctorController(
         IDoctorModelFactory doctorModelFactory, 
         IMapper mapper, 
-        IDoctorService doctorService)
+        IDoctorService doctorService,
+        IDoctorProcedureService doctorProcedureService)
     {
         _doctorModelFactory = doctorModelFactory;
         _mapper = mapper;
         _doctorService = doctorService;
+        _doctorProcedureService = doctorProcedureService;
     }
 
     public IActionResult Index()
@@ -48,10 +51,21 @@ public class DoctorController : AdminBaseController
             var doctor = _mapper.Map<Doctor>(model);
 
             await _doctorService.AddAsync(doctor);
+            
+            foreach (var selectedProceduresId in model.SelectedProceduresIds)
+            {
+                await _doctorProcedureService.AddAsync(new DoctorProcedure()
+                {
+                    ProcedureId = selectedProceduresId,
+                    DoctorId = doctor.Id
+                });
+            }
+            
             return RedirectToAction("List");
         }
 
-        return RedirectToAction("Create");
+        model = await _doctorModelFactory.PrepareDoctorModelAsync(model, null);
+        return View(model);
     }
     
     public async Task<IActionResult> Edit(int id)
@@ -74,15 +88,35 @@ public class DoctorController : AdminBaseController
         if (ModelState.IsValid)
         {
             var doctor = _mapper.Map<Doctor>(model);
-
+            
             await _doctorService.UpdateAsync(doctor);
+
+            var doctorProcedures = await _doctorProcedureService.GetAllDoctorProceduresByDoctorIdAsync(doctor.Id);
+            
+            foreach (var doctorProcedure in doctorProcedures.Where(doctorProcedure => !model.SelectedProceduresIds.Any(mp => mp == doctorProcedure.Id)))
+            {
+                await _doctorProcedureService.DeleteAsync(doctorProcedure);
+            }
+            
+            foreach (var procedureId in model.SelectedProceduresIds)
+            {
+                if (await _doctorProcedureService.GetDoctorProcedureByDoctorAndProcedureIdAsync(doctor.Id ,procedureId) == null)
+                {
+                    await _doctorProcedureService.AddAsync(new DoctorProcedure()
+                    {
+                        DoctorId = doctor.Id,
+                        ProcedureId = procedureId
+                    });
+                }
+            }
+            
             return RedirectToAction("List");
         }
 
-        return RedirectToAction("Edit", new{id = model.Id});
+        model = await _doctorModelFactory.PrepareDoctorModelAsync(model, null);
+        return View(model);
     }
-
-    [HttpPost]
+    
     public async Task<IActionResult> Delete(int id)
     {
         var doctor = await _doctorService.GetDoctorByIdAsync(id);

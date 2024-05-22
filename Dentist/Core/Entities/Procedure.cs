@@ -6,6 +6,6 @@ public class Procedure : BaseEntity
     public string Description { get; set; }
     public string CabinetNumber { get; set; }
     
-    public IList<Doctor> Doctors { get; set; }
+    public IList<DoctorProcedure> DoctorProcedures { get; set; }
     public IList<Appointment> Appointments { get; set; }
 }
