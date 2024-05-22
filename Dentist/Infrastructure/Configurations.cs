@@ -22,9 +22,10 @@ public static class Configurations
         serviceCollection.AddDatabaseDeveloperPageExceptionFilter();
 
         serviceCollection
-            .AddIdentity<ApplicationUser, IdentityRole>()
+            .AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultUI()
             .AddDefaultTokenProviders();
         
         serviceCollection.AddDependencies();
