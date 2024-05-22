@@ -2,6 +2,7 @@
 using AutoMapper;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging;
 using Web.Areas.Admin.Factories;
 using Web.Areas.Admin.Models.DoctorModels;
 
