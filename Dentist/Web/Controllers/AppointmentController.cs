@@ -84,8 +84,6 @@ public class AppointmentController : BaseController
     [HttpGet]
     public async Task<JsonResult> GetDoctors(int procedureId, DateTime appointmentDateTimeUtc)
     {
-        
-        
         var doctors = await _baseModelFactory.PrepareAvailableDoctorsAsync(procedureId, appointmentDateTimeUtc);
 
         return new JsonResult(doctors);
