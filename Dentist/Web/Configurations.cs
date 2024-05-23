@@ -27,6 +27,7 @@ public static class Configurations
         serviceCollection.AddScoped<IDoctorModelFactory, DoctorModelFactory>();
         serviceCollection.AddScoped<IProcedureModelFactory, ProcedureModelFactory>();
         serviceCollection.AddScoped<IBaseAdminModelFactory, BaseAdminModelFactory>();
+        serviceCollection.AddScoped<IAppointmentModelFactory, AppointmentModelFactory>();
 
         //register base factories
         serviceCollection.AddScoped<IBaseModelFactory, BaseModelFactory>();

@@ -18,10 +18,9 @@ public class BaseAdminSearchModel : BaseAdminModel, IPagingRequestModel
 
     public int Length { get; set; }
 
-    public void SetGridPageSize(int pageSize, string availablePageSizes = null)
+    public void SetGridPageSize(int pageSize)
     {
         Start = 0;
         Length = pageSize;
-        AvailablePageSizes = availablePageSizes;
     }
 }

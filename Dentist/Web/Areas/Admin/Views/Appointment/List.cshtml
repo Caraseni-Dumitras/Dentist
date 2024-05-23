@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Appointments List";
+}
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Web.Areas.Admin.Models.AppointmentModels.AppointmentSearchModel
+
+<form asp-area="Admin" asp-action="List" asp-controller="Appointment" method="post" id="searchForm">
+    <div class="form-group">
+        <label asp-for="SearchByProcedureName">Search by Procedure Name</label>
+        <input asp-for="SearchByProcedureName" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary" id="searchBtn">Search</button>
+</form>
+
+<table id="appointmentsTable" class="table">
+    <thead>
+    <tr>
+        <th>User Name</th>
+        <th>User Email</th>
+        <th>Procedure Name</th>
+        <th>Doctor Name</th>
+        <th>Doctor Email</th>
+        <th>Cabinet Number</th>
+        <th>Date Time</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        $('#searchBtn').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("List", "Appointment")',
+                type: 'POST',
+                data: $('#searchForm').serialize(),
+                success: function (data) {
+                    $('#appointmentsTable tbody').empty();
+                    $.each(data.data, function (index, item) {
+                        $('#appointmentsTable tbody').append('<tr>' +
+                            '<td>' + item.userName + '</td>' +
+                            '<td>' + item.userEmail + '</td>' +
+                            '<td>' + item.procedureName + '</td>' +
+                            '<td>' + item.doctorName + '</td>' +
+                            '<td>' + item.doctorEmail + '</td>' +
+                            '<td>' + item.cabinetNumber + '</td>' +
+                            '<td>' + item.dateTime + '</td>' +
+                            '</tr>');
+                    });
+                    
+                    $('#pagination').empty();
+                    for (var i = 1; i <= data.totalPages; i++) {
+                        $('#pagination').append('<li class="page-item"><a class="page-link" data-page="' + i + '">' + i + '</a></li>');
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#pagination .page-link', function () {
+            var page = $(this).data('page');
+            $('#searchForm input[name="Page"]').val(page);
+            $('#searchBtn').click();
+        });
+    });
+</script>
+}
