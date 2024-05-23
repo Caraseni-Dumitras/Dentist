@@ -6,5 +6,5 @@ namespace Web.Factories;
 public interface IBaseModelFactory
 {
     Task PrepareAvailableProceduresAndDoctorsAsync(AppointmentModel model);
-    Task<List<SelectListItem>> PrepareAvailableDoctorsAsync(int procedureId);
+    Task<List<SelectListItem>> PrepareAvailableDoctorsAsync(int procedureId, DateTime appointmentDateTimeUtc);
 }

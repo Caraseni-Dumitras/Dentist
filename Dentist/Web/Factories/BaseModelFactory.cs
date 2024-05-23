@@ -24,9 +24,9 @@ public class BaseModelFactory : IBaseModelFactory
         model.Procedures.AddRange(await GetProcedureListAsync());
     }
 
-    public async Task<List<SelectListItem>> PrepareAvailableDoctorsAsync(int procedureId)
+    public async Task<List<SelectListItem>> PrepareAvailableDoctorsAsync(int procedureId, DateTime appointmentDateTimeUtc)
     {
-        var availableDoctors = await _doctorService.GetAllDoctorsByProcedureId(procedureId);
+        var availableDoctors = await _doctorService.GetAllDoctorsByProcedureId(procedureId, appointmentDateTimeUtc);
 
         var doctorItems = availableDoctors.Select(d => new SelectListItem
         {

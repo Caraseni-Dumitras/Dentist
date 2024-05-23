@@ -21,9 +21,11 @@ public class DoctorService : IDoctorService
         return await ( await _doctorRepository.GetAllAsync()).ToPagedListAsync(0, int.MaxValue);
     }
 
-    public async Task<List<Doctor>> GetAllDoctorsByProcedureId(int procedureId)
+    public async Task<List<Doctor>> GetAllDoctorsByProcedureId(int procedureId, DateTime appointmentDateTimeUtc)
     {
-        return await _doctorRepository.Table.Where(it => it.DoctorProcedures.Any(it => it.ProcedureId == procedureId))
+        return await _doctorRepository.Table
+            .Where(d => d.DoctorProcedures.Any(dp => dp.ProcedureId == procedureId)
+                        && d.Appointments.All(a => a.Date != appointmentDateTimeUtc))
             .ToListAsync();
     }
 

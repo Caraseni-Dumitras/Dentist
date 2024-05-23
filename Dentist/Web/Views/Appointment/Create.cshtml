@@ -15,13 +15,13 @@
 
     <div class="form-group">
         <label asp-for="SelectedDate">Select a Date:</label>
-        <input asp-for="SelectedDate" type="Date" class="form-control" min="@Model.SelectedDate.ToString("yyyy-MM-dd")"/>
+        <input asp-for="SelectedDate" type="Date" class="form-control" min="@Model.SelectedDate.ToString("yyyy-MM-dd")" id="datePicker"/>
         <span asp-validation-for="SelectedDate" class="text-danger"></span>
     </div>
 
     <div>
         <label asp-for="SelectedTime">Select Time:</label>
-        <input asp-for="SelectedTime" type="time" class="form-control" min="08:00" max="16:00" step="1800" />
+        <input asp-for="SelectedTime" type="time" class="form-control" min="08:00" max="16:00" step="1800" id="timePicker"/>
         <span asp-validation-for="SelectedTime" class="text-danger"></span>
     </div>
 
@@ -39,15 +39,27 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('#procedureDropdown').change(function () {
-                var procedureId = $(this).val();
-                $.getJSON('@Url.Action("GetDoctors", "Appointment")', { procedureId: procedureId }, function (data) {
-                    var items = '<option>Select a Doctor</option>';
-                    $.each(data, function (i, doctor) {
-                        items += "<option value='" + doctor.value + "'>" + doctor.text + "</option>";
+            $('#procedureDropdown, #datePicker, #timePicker').change(function () {
+                var procedureId = $('#procedureDropdown').val();
+                var selectedDate = $('#datePicker').val();
+                var selectedTime = $('#timePicker').val();
+
+                if (procedureId && selectedDate && selectedTime) {
+                    var dateTimeString = selectedDate + 'T' + selectedTime;
+                    var localDateTime = new Date(dateTimeString);
+                    var utcDateTime = localDateTime.toISOString();
+
+                    $.getJSON('@Url.Action("GetDoctors", "Appointment")', {
+                        procedureId: procedureId,
+                        appointmentDateTimeUtc: utcDateTime
+                    }, function (data) {
+                        var items = '<option>Select a Doctor</option>';
+                        $.each(data, function (i, doctor) {
+                            items += "<option value='" + doctor.value + "'>" + doctor.text + "</option>";
+                        });
+                        $('#doctorDropdown').html(items);
                     });
-                    $('#doctorDropdown').html(items);
-                });
+                }
             });
         });
     </script>
