@@ -46,3 +46,10 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.nav-display{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  padding-bottom: 0;
+}

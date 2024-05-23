@@ -19,33 +19,33 @@ public class ProcedureModelFactory : IProcedureModelFactory
         _procedureService = procedureService;
     }
 
-    public async Task<ProcedureModel> PrepareProcedureModelAsync(ProcedureModel model, Procedure doctor)
+    public async Task<ProcedureAdminModel> PrepareProcedureModelAsync(ProcedureAdminModel adminModel, Procedure doctor)
     {
-        if (model is null)
+        if (adminModel is null)
         {
-            model = new ProcedureModel();
+            adminModel = new ProcedureAdminModel();
         }
         
         if (doctor is not null)
         {
-            model = _mapper.Map<ProcedureModel>(doctor);
+            adminModel = _mapper.Map<ProcedureAdminModel>(doctor);
         }
 
-        return model;
+        return adminModel;
     }
 
-    public async Task<ProcedureListModel> PrepareProcedureModelListAsync(ProcedureSearchModel searchModel)
+    public async Task<ProcedureListAdminModel> PrepareProcedureModelListAsync(ProcedureAdminSearchModel adminSearchModel)
     {
-        if (searchModel == null)
-            throw new ArgumentNullException(nameof(searchModel));
+        if (adminSearchModel == null)
+            throw new ArgumentNullException(nameof(adminSearchModel));
 
         var procedures = await _procedureService.GetAllProcedures();
 
-        var model = await new ProcedureListModel().PrepareToGridAsync(searchModel, procedures, () =>
+        var model = await new ProcedureListAdminModel().PrepareToGridAsync(adminSearchModel, procedures, () =>
         {
             return procedures.Select(procedure =>
             {
-                var procedureModel = _mapper.Map<ProcedureModel>(procedure);
+                var procedureModel = _mapper.Map<ProcedureAdminModel>(procedure);
                 return procedureModel;
             });
         });

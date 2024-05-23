@@ -34,26 +34,26 @@ public class DoctorController : AdminBaseController
     
     public async Task<IActionResult> List()
     {
-        var model = await _doctorModelFactory.PrepareDoctorModelListAsync(new DoctorSearchModel());
+        var model = await _doctorModelFactory.PrepareDoctorModelListAsync(new DoctorAdminSearchModel());
         return View(model);
     }
 
     public async Task<IActionResult> Create()
     {
-        var model = await _doctorModelFactory.PrepareDoctorModelAsync(new DoctorModel(), null);
+        var model = await _doctorModelFactory.PrepareDoctorModelAsync(new DoctorAdminModel(), null);
         return View(model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(DoctorModel model)
+    public async Task<IActionResult> Create(DoctorAdminModel adminModel)
     {
         if (ModelState.IsValid)
         {
-            var doctor = _mapper.Map<Doctor>(model);
+            var doctor = _mapper.Map<Doctor>(adminModel);
 
             await _doctorService.AddAsync(doctor);
             
-            foreach (var selectedProceduresId in model.SelectedProceduresIds)
+            foreach (var selectedProceduresId in adminModel.SelectedProceduresIds)
             {
                 await _doctorProcedureService.AddAsync(new DoctorProcedure()
                 {
@@ -65,8 +65,8 @@ public class DoctorController : AdminBaseController
             return RedirectToAction("List");
         }
 
-        model = await _doctorModelFactory.PrepareDoctorModelAsync(model, null);
-        return View(model);
+        adminModel = await _doctorModelFactory.PrepareDoctorModelAsync(adminModel, null);
+        return View(adminModel);
     }
     
     public async Task<IActionResult> Edit(int id)
@@ -78,28 +78,28 @@ public class DoctorController : AdminBaseController
             throw new ArgumentNullException(nameof(doctor));
         }
         
-        var model = await _doctorModelFactory.PrepareDoctorModelAsync(new DoctorModel(), doctor);
+        var model = await _doctorModelFactory.PrepareDoctorModelAsync(new DoctorAdminModel(), doctor);
         
         return View(model);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Edit(DoctorModel model)
+    public async Task<IActionResult> Edit(DoctorAdminModel adminModel)
     {
         if (ModelState.IsValid)
         {
-            var doctor = _mapper.Map<Doctor>(model);
+            var doctor = _mapper.Map<Doctor>(adminModel);
             
             await _doctorService.UpdateAsync(doctor);
 
             var doctorProcedures = await _doctorProcedureService.GetAllDoctorProceduresByDoctorIdAsync(doctor.Id);
             
-            foreach (var doctorProcedure in doctorProcedures.Where(doctorProcedure => !model.SelectedProceduresIds.Any(mp => mp == doctorProcedure.Id)))
+            foreach (var doctorProcedure in doctorProcedures.Where(doctorProcedure => !adminModel.SelectedProceduresIds.Any(mp => mp == doctorProcedure.Id)))
             {
                 await _doctorProcedureService.DeleteAsync(doctorProcedure);
             }
             
-            foreach (var procedureId in model.SelectedProceduresIds)
+            foreach (var procedureId in adminModel.SelectedProceduresIds)
             {
                 if (await _doctorProcedureService.GetDoctorProcedureByDoctorAndProcedureIdAsync(doctor.Id ,procedureId) == null)
                 {
@@ -114,8 +114,8 @@ public class DoctorController : AdminBaseController
             return RedirectToAction("List");
         }
 
-        model = await _doctorModelFactory.PrepareDoctorModelAsync(model, null);
-        return View(model);
+        adminModel = await _doctorModelFactory.PrepareDoctorModelAsync(adminModel, null);
+        return View(adminModel);
     }
     
     public async Task<IActionResult> Delete(int id)

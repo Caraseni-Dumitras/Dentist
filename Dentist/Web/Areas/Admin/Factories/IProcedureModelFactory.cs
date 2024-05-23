@@ -5,6 +5,6 @@ namespace Web.Areas.Admin.Factories;
 
 public interface IProcedureModelFactory
 {
-    Task<ProcedureModel> PrepareProcedureModelAsync(ProcedureModel model, Procedure doctor);
-    Task<ProcedureListModel> PrepareProcedureModelListAsync(ProcedureSearchModel searchModel);
+    Task<ProcedureAdminModel> PrepareProcedureModelAsync(ProcedureAdminModel adminModel, Procedure doctor);
+    Task<ProcedureListAdminModel> PrepareProcedureModelListAsync(ProcedureAdminSearchModel adminSearchModel);
 }

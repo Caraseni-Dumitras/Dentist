@@ -1,4 +1,4 @@
-﻿namespace Web.Areas.Admin.Models;
+﻿namespace Web.Models;
 
 public class BaseModel
 {

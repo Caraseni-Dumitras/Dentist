@@ -1,6 +1,6 @@
 ﻿namespace Web.Areas.Admin.Models.DoctorModels;
 
-public class DoctorSearchModel : BaseSearchModel
+public class DoctorAdminSearchModel : BaseAdminSearchModel
 {
     
 }

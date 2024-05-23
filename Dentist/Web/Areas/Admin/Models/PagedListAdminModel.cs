@@ -1,6 +1,6 @@
 ﻿namespace Web.Areas.Admin.Models;
 
-public abstract class PagedListModel<T> : BaseModel, IPagedModel<T> where T : BaseModel
+public abstract class PagedListAdminModel<T> : BaseAdminModel, IPagedModel<T> where T : BaseAdminModel
 {
     public IEnumerable<T> Data { get; set; }
     public string Draw { get; set; }

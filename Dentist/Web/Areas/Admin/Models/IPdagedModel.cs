@@ -2,6 +2,6 @@
 
 namespace Web.Areas.Admin.Models;
 
-public interface IPagedModel<T> where T : BaseModel
+public interface IPagedModel<T> where T : BaseAdminModel
 {
 }

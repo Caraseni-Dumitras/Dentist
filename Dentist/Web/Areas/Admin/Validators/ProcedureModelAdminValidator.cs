@@ -3,9 +3,9 @@ using Web.Areas.Admin.Models.ProcedureModels;
 
 namespace Web.Areas.Admin.Validators;
 
-public class ProcedureModelValidator : BaseValidatorModel<ProcedureModel>
+public class ProcedureModelAdminValidator : BaseAdminValidatorModel<ProcedureAdminModel>
 {
-    public ProcedureModelValidator()
+    public ProcedureModelAdminValidator()
     {
         RuleFor(it => it.Name)
             .NotEmpty()

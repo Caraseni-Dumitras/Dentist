@@ -30,22 +30,22 @@ public class ProcedureController : AdminBaseController
     
     public async Task<IActionResult> List()
     {
-        var model = await _procedureModelFactory.PrepareProcedureModelListAsync(new ProcedureSearchModel());
+        var model = await _procedureModelFactory.PrepareProcedureModelListAsync(new ProcedureAdminSearchModel());
         return View(model);
     }
     
     public async Task<IActionResult> Create()
     {
-        var model = await _procedureModelFactory.PrepareProcedureModelAsync(new ProcedureModel(), null);
+        var model = await _procedureModelFactory.PrepareProcedureModelAsync(new ProcedureAdminModel(), null);
         return View(model);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ProcedureModel model)
+    public async Task<IActionResult> Create(ProcedureAdminModel adminModel)
     {
         if (ModelState.IsValid)
         {
-            var procedure = _mapper.Map<Procedure>(model);
+            var procedure = _mapper.Map<Procedure>(adminModel);
 
             await _procedureService.AddAsync(procedure);
             return RedirectToAction("List");
@@ -63,23 +63,23 @@ public class ProcedureController : AdminBaseController
             throw new ArgumentNullException(nameof(procedure));
         }
         
-        var model = await _procedureModelFactory.PrepareProcedureModelAsync(new ProcedureModel(), procedure);
+        var model = await _procedureModelFactory.PrepareProcedureModelAsync(new ProcedureAdminModel(), procedure);
         
         return View(model);
     }
     
     [HttpPost]
-    public async Task<IActionResult> Edit(ProcedureModel model)
+    public async Task<IActionResult> Edit(ProcedureAdminModel adminModel)
     {
         if (ModelState.IsValid)
         {
-            var procedure = _mapper.Map<Procedure>(model);
+            var procedure = _mapper.Map<Procedure>(adminModel);
 
             await _procedureService.UpdateAsync(procedure);
             return RedirectToAction("List");
         }
 
-        return RedirectToAction("Edit", new{id = model.Id});
+        return RedirectToAction("Edit", new{id = adminModel.Id});
     }
     
     public async Task<IActionResult> Delete(int id)

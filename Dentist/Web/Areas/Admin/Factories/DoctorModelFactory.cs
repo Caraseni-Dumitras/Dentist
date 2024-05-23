@@ -10,13 +10,13 @@ public class DoctorModelFactory : IDoctorModelFactory
 {
     private readonly IMapper _mapper;
     private readonly IDoctorService _doctorService;
-    private readonly IBaseAdminModelFactoy _baseAdminModelFactory;
+    private readonly IBaseAdminModelFactory _baseAdminModelFactory;
     private readonly IDoctorProcedureService _doctorProcedureService;
 
     public DoctorModelFactory(
         IMapper mapper, 
         IDoctorService doctorService, 
-        IBaseAdminModelFactoy baseAdminModelFactory, 
+        IBaseAdminModelFactory baseAdminModelFactory, 
         IDoctorProcedureService doctorProcedureService)
     {
         _mapper = mapper;
@@ -25,44 +25,44 @@ public class DoctorModelFactory : IDoctorModelFactory
         _doctorProcedureService = doctorProcedureService;
     }
 
-    public async Task<DoctorModel> PrepareDoctorModelAsync(DoctorModel model, Doctor doctor)
+    public async Task<DoctorAdminModel> PrepareDoctorModelAsync(DoctorAdminModel adminModel, Doctor doctor)
     {
-        if (model is null)
+        if (adminModel is null)
         {
-            model = new DoctorModel();
+            adminModel = new DoctorAdminModel();
         }
         
         if (doctor is not null)
         {
-            model = _mapper.Map<DoctorModel>(doctor);
-            model.SelectedProceduresIds =
+            adminModel = _mapper.Map<DoctorAdminModel>(doctor);
+            adminModel.SelectedProceduresIds =
                 (await _doctorProcedureService.GetAllDoctorProceduresByDoctorIdAsync(doctor.Id)).Select(it => it.ProcedureId)
                 .ToList();
         }
         
-        await _baseAdminModelFactory.PrepareAvailableProceduresAsync(model.AvailableProcedures);
+        await _baseAdminModelFactory.PrepareAvailableProceduresAsync(adminModel.AvailableProcedures);
         
-        foreach (var procedureItem in model.AvailableProcedures)
+        foreach (var procedureItem in adminModel.AvailableProcedures)
         {
             procedureItem.Selected = int.TryParse(procedureItem.Value, out var procedureId)
-                                     && model.SelectedProceduresIds.Contains(procedureId);
+                                     && adminModel.SelectedProceduresIds.Contains(procedureId);
         }
 
-        return model;
+        return adminModel;
     }
 
-    public async Task<DoctorListModel> PrepareDoctorModelListAsync(DoctorSearchModel searchModel)
+    public async Task<DoctorListAdminModel> PrepareDoctorModelListAsync(DoctorAdminSearchModel adminSearchModel)
     {
-        if (searchModel == null)
-            throw new ArgumentNullException(nameof(searchModel));
+        if (adminSearchModel == null)
+            throw new ArgumentNullException(nameof(adminSearchModel));
 
         var doctors = await _doctorService.GetAllDoctors();
 
-        var model = await new DoctorListModel().PrepareToGridAsync(searchModel, doctors, () =>
+        var model = await new DoctorListAdminModel().PrepareToGridAsync(adminSearchModel, doctors, () =>
         {
             return doctors.Select(doctor =>
             {
-                var doctorModel = _mapper.Map<DoctorModel>(doctor);
+                var doctorModel = _mapper.Map<DoctorAdminModel>(doctor);
                 return doctorModel;
             });
         });

@@ -2,7 +2,7 @@
 
 namespace Web.Areas.Admin.Factories;
 
-public interface IBaseAdminModelFactoy
+public interface IBaseAdminModelFactory
 {
     Task PrepareAvailableProceduresAsync(IList<SelectListItem> items);
 }

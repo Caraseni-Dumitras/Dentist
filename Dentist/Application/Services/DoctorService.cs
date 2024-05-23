@@ -21,6 +21,12 @@ public class DoctorService : IDoctorService
         return await ( await _doctorRepository.GetAllAsync()).ToPagedListAsync(0, int.MaxValue);
     }
 
+    public async Task<List<Doctor>> GetAllDoctorsByProcedureId(int procedureId)
+    {
+        return await _doctorRepository.Table.Where(it => it.DoctorProcedures.Any(it => it.ProcedureId == procedureId))
+            .ToListAsync();
+    }
+
     public async Task AddAsync(Doctor doctor)
     {
         await _doctorRepository.InsertAsync(doctor);

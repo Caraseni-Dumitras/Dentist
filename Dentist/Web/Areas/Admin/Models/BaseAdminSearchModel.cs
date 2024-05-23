@@ -1,8 +1,8 @@
 ﻿namespace Web.Areas.Admin.Models;
 
-public class BaseSearchModel : BaseModel, IPagingRequestModel
+public class BaseAdminSearchModel : BaseAdminModel, IPagingRequestModel
 {
-    protected BaseSearchModel()
+    protected BaseAdminSearchModel()
     {
         Length = 10;
     }

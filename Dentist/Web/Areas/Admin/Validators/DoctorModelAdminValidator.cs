@@ -3,9 +3,9 @@ using Web.Areas.Admin.Models.DoctorModels;
 
 namespace Web.Areas.Admin.Validators;
 
-public class DoctorModelValidator : BaseValidatorModel<DoctorModel>
+public class DoctorModelAdminValidator : BaseAdminValidatorModel<DoctorAdminModel>
 {
-    public DoctorModelValidator()
+    public DoctorModelAdminValidator()
     {
         RuleFor(it => it.FirstName)
             .NotEmpty()

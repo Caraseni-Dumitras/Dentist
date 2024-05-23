@@ -14,10 +14,10 @@ public class AdminMapperConfiguration: Profile
 
     private void CreateConfigMaps()
     {
-        CreateMap<Doctor, DoctorModel>();
-        CreateMap<DoctorModel, Doctor>();
+        CreateMap<Doctor, DoctorAdminModel>();
+        CreateMap<DoctorAdminModel, Doctor>();
         
-        CreateMap<Procedure, ProcedureModel>();
-        CreateMap<ProcedureModel, Procedure>();
+        CreateMap<Procedure, ProcedureAdminModel>();
+        CreateMap<ProcedureAdminModel, Procedure>();
     }
 }

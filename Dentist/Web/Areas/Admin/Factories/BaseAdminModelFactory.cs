@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Web.Areas.Admin.Factories;
 
-public class BaseAdminModelFactory: IBaseAdminModelFactoy
+public class BaseAdminModelFactory: IBaseAdminModelFactory
 {
     private readonly IProcedureService _procedureService;
 

@@ -2,9 +2,9 @@
 
 namespace Web.Areas.Admin.Models.DoctorModels;
 
-public class DoctorModel : BaseModel
+public class DoctorAdminModel : BaseAdminModel
 {
-    public DoctorModel()
+    public DoctorAdminModel()
     {
         SelectedProceduresIds = new List<int>();
         AvailableProcedures = new List<SelectListItem>();
