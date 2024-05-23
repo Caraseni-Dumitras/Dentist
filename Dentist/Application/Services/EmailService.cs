@@ -1,31 +1,39 @@
-﻿// using System.Net.Mail;
-//
-// namespace Application.Services;
-//
-// public class EmailService : IEmailService
-// {
-//     
-//     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
-//     {
-//         var client = new SmtpClient("localhost", 25); // or 2525
-//         var message = new MailMessage
-//         {
-//             From = new MailAddress("test@example.com"),
-//             Subject = subject,
-//             Body = htmlMessage,
-//             IsBodyHtml = true
-//         };
-//         message.To.Add(email);
-//
-//         await client.SendMailAsync(message);
-//     }
-// }
-//
-// public class EmailConfiguration
-// {
-//     public string SmtpServer { get; set; }
-//     public int Port { get; set; }
-//     public string Username { get; set; }
-//     public string Password { get; set; }
-//     public string FromAddress { get; set; }
-// }
+﻿using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+
+namespace Application.Services;
+
+public class EmailService : IEmailService
+{
+    private readonly EmailConfiguration _emailConfig;
+
+    public EmailService(IOptions<EmailConfiguration> emailConfig)
+    {
+        _emailConfig = emailConfig.Value;
+    }
+    
+    public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+    {
+        var client = new SendGridClient(_emailConfig.ApiKey);
+        var from = new EmailAddress(_emailConfig.Email, _emailConfig.Company);
+        var to = new EmailAddress(email);
+        var plainTextContent = htmlMessage;
+        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlMessage);
+
+        var response = await client.SendEmailAsync(msg);
+
+        if (response.StatusCode != System.Net.HttpStatusCode.OK &&
+            response.StatusCode != System.Net.HttpStatusCode.Accepted)
+        {
+            throw new Exception($"Failed to send email: {response.StatusCode}");
+        }
+    }
+}
+
+public class EmailConfiguration
+{
+    public string ApiKey { get; set; }
+    public string Email { get; set; }
+    public string Company { get; set; }
+}

@@ -1,4 +1,5 @@
 using Application;
+using Application.Services;
 using Infrastructure;
 using Infrastructure.Services;
 using Web;
@@ -9,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("AppData/appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("AppData/appsettings.Local.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("AppData/appsettings.Development.json", optional: true, reloadOnChange: true);
+builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
 
 // configure layers
 builder.Services.ConfigureInfrastructure(builder.Configuration);

@@ -1,4 +1,5 @@
-﻿using Application.Services;
+﻿using System.Configuration;
+using Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -11,6 +12,6 @@ public static class Configurations
         serviceCollection.AddScoped<IProcedureService, ProcedureService>();
         serviceCollection.AddScoped<IDoctorProcedureService, DoctorProcedureService>();
 
-        // serviceCollection.AddTransient<IEmailService, EmailService>();
+        serviceCollection.AddTransient<IEmailService, EmailService>();
     }
 }
