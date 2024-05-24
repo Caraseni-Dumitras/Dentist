@@ -5,11 +5,12 @@
 @model Web.Areas.Admin.Models.AppointmentModels.AppointmentSearchModel
 
 <form asp-area="Admin" asp-action="List" asp-controller="Appointment" method="post" id="searchForm">
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="SearchByProcedureName">Search by Procedure Name</label>
-        <input asp-for="SearchByProcedureName" class="form-control" />
+        <input asp-for="SearchByProcedureName" class="form-control" id="procedureNameInput"/>
     </div>
     <button type="submit" class="btn btn-primary" id="searchBtn">Search</button>
+    <button type="button" class="btn btn-primary" id="clearBtn">Clear filters</button>
 </form>
 
 <table id="appointmentsTable" class="table">
@@ -32,8 +33,20 @@
 @section Scripts {
     <script>
     $(document).ready(function () {
-        $('#searchBtn').click(function (e) {
-            e.preventDefault();
+            searchAppointments();
+
+            $('#searchBtn').click(function (e) {
+                e.preventDefault();
+                searchAppointments();
+            });
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', function() {
+        document.getElementById('procedureNameInput').value = '';
+        searchAppointments();
+    });
+    
+        function searchAppointments() {
             $.ajax({
                 url: '@Url.Action("List", "Appointment")',
                 type: 'POST',
@@ -51,20 +64,8 @@
                             '<td>' + item.dateTime + '</td>' +
                             '</tr>');
                     });
-                    
-                    $('#pagination').empty();
-                    for (var i = 1; i <= data.totalPages; i++) {
-                        $('#pagination').append('<li class="page-item"><a class="page-link" data-page="' + i + '">' + i + '</a></li>');
-                    }
                 }
             });
-        });
-
-        $(document).on('click', '#pagination .page-link', function () {
-            var page = $(this).data('page');
-            $('#searchForm input[name="Page"]').val(page);
-            $('#searchBtn').click();
-        });
-    });
+        }
 </script>
 }

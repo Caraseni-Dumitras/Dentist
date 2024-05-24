@@ -23,7 +23,7 @@ public class AppointmentService : IAppointmentService
         if (!string.IsNullOrEmpty(procedureName))
         {
             query = query.Where(appointment =>
-                appointment.Procedure.Name.ToLower() == procedureName.ToLower());
+                appointment.Procedure.Name.ToLower().Contains(procedureName.ToLower()));
         }
 
         return await(await query.ToListAsync()).ToPagedListAsync(pageindex, pageSize);
